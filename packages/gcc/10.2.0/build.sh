@@ -16,6 +16,10 @@ tar xzf gcc.tar.gz --strip-components=1
 
 cd ../obj
 
+# Download and install json library
+mkdir -p $PREFIX/include/nlohmann
+curl -L "https://github.com/nlohmann/json/releases/download/v3.11.2/json.hpp" -o $PREFIX/include/nlohmann/json.hpp
+
 # === autoconf based === 
 ../build/configure --prefix "$PREFIX" --enable-languages=c,c++,d,fortran --disable-multilib --disable-bootstrap
 
