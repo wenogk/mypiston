@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
-# Put instructions to run the runtime
-# this code assumes first arg is main file to run
-mv $1 $1.java
-filename=$1.java
-shift
-java $filename "$@"
+if [ $# -eq 1 ]; then
+    mv $1 $1.java
+    filename=$1.java
+    shift
+    java $filename "$@"
+else
+    # Run the compiled Java classes	
+    # Assuming the first argument is the main class file to run	
+    # Remove .java extension from the main class name if present	
+    mainClass="${1%.java}"	
+    # Execute the main class	
+    java "$mainClass"	
+fi
