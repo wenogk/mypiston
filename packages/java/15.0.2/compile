@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Check if more than one argument is provided
+if [ $# -gt 1 ]; then
+    # Initialize an empty array to hold the filenames
+    declare -a javaFiles
+
+    # Loop through each argument
+    for file in "$@"; do
+        # Check if the file already ends with .java
+        if [[ "$file" == *.java ]]; then
+            # If it does, add it directly to the array
+            javaFiles+=("$file")
+        else
+            # If it doesn't, add .java extension then add to the array
+            javaFiles+=("${file}.java")
+        fi
+    done
+
+    # Compile all Java files at once
+    javac "${javaFiles[@]}"
+fi
