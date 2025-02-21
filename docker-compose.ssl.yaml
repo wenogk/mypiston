@@ -1,0 +1,44 @@
+version: '3.2'
+
+services:
+  api:
+    build: api
+    container_name: piston_api
+    privileged: true
+    restart: always
+    expose:
+      - "2000"
+    volumes:
+      - ./data/piston/packages:/piston/packages
+    environment:
+      - PISTON_REPO_URL=http://repo:8000/index
+
+  repo:
+    build: repo
+    container_name: piston_repo
+    command: ['--no-build']
+    volumes:
+      - .:/piston
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+      - ./auth/.htpasswd:/etc/nginx/auth/.htpasswd  # Mount the .htpasswd file
+    depends_on:
+      - api
+      - repo
+    restart: always
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    restart: always
