@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 
-# Compile Java files
+# Compile Java files (HAS TO HAVE .java in name)
 declare -a javaFiles
 for file in "$@"; do
     if [[ "$file" == *.java ]]; then
         javaFiles+=("$file")
-    else
-        javaFiles+=("${file}.java")
     fi
 done
 javac "${javaFiles[@]}"
 
 # Run the main Java class
 mainClass="${1%.java}"
-shift
+shift ${#javaFiles[@]}  # Shift number of Java files
 java "$mainClass" "$@"
