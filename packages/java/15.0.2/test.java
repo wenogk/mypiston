@@ -1,6 +1,6 @@
 import org.json.JSONObject;
 
-public class HelloWorld {
+public class Test {
     public static void main(String[] args) {
         // Create a simple JSON object
         JSONObject json = new JSONObject();
