@@ -388,10 +388,16 @@ class Job {
         if (!compile_errored) {
             this.logger.debug('Running');
             emit_event_bus_stage('run');
+
+            // send all files as args for run if java or cpp
+            let runArgs = [code_files[0].name, ...this.args]
+            if (this.runtime.language == "java" || this.runtime.languge == "cpp" || this.runtime.languge == "gcc") {
+                runArgs = code_files.map(x => x.name);
+            }
             run = await this.safe_call(
                 box,
                 'run',
-                [code_files[0].name, ...this.args],
+                runArgs,
                 this.timeouts.run,
                 this.cpu_times.run,
                 this.memory_limits.run,
