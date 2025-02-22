@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 
-# Put instructions to run the runtime
+# only works for cpp
+# rename 's/$/\.cpp/' "$@" # Add .cpp extension
+# ^ why not just pass .cpp in the names lol
 
-shift # Discard main filename
+g++ -std=c++17 *.cpp
+
+chmod +x a.out
+
+# Count number of .cpp files
+cpp_count=$(echo "$@" | tr ' ' '\n' | grep -c '\.cpp$')
+
+# Shift for each .cpp file
+for ((i=0; i<cpp_count; i++)); do
+    shift
+done
+
 ./a.out "$@"
+

@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-if [ $# -eq 1 ]; then
-    mv $1 $1.java
-    filename=$1.java
-    shift
-    java $filename "$@"
-else
-    # Run the compiled Java classes	
-    # Assuming the first argument is the main class file to run	
-    # Remove .java extension from the main class name if present	
-    mainClass="${1%.java}"	
-    # Execute the main class	
-    java "$mainClass"	
-fi
+# Compile Java files (HAS TO HAVE .java in name)
+declare -a javaFiles
+for file in "$@"; do
+    if [[ "$file" == *.java ]]; then
+        javaFiles+=("$file")
+    fi
+done
+javac "${javaFiles[@]}"
+
+# Run the main Java class
+mainClass="${1%.java}"
+shift ${#javaFiles[@]}  # Shift number of Java files
+java "$mainClass" "$@"
