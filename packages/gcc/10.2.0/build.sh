@@ -17,9 +17,9 @@ tar xzf gcc.tar.gz --strip-components=1
 cd ../obj
 
 # Download and install json library
-mkdir -p $PREFIX/include
+mkdir -p $PREFIX/include/rapidjson
 curl -L "https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz" -o rapidjson.tar.gz
-tar xzf rapidjson.tar.gz --strip-components=1 -C $PREFIX/include rapidjson-1.1.0/include
+tar xzf rapidjson.tar.gz --strip-components=1 -C $PREFIX/include/rapidjson rapidjson-1.1.0/include/
 rm rapidjson.tar.gz
 
 # === autoconf based === 
