@@ -12,3 +12,6 @@ services:
             - ./data/piston/packages:/piston/packages
         tmpfs:
             - /tmp:exec
+        environment:
+            - PISTON_RUN_CPU_TIME=20000  # Set CPU time to 20 seconds
+            - PISTON_RUN_TIMEOUT=15000
