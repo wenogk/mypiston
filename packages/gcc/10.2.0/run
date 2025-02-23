@@ -4,7 +4,7 @@
 # rename 's/$/\.cpp/' "$@" # Add .cpp extension
 # ^ why not just pass .cpp in the names lol
 
-g++ -std=c++17 *.cpp
+g++ -std=c++17 -I$(dirname $0)/include *.cpp
 
 chmod +x a.out
 
