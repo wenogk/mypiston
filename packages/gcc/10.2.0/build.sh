@@ -17,8 +17,10 @@ tar xzf gcc.tar.gz --strip-components=1
 cd ../obj
 
 # Download and install json library
-mkdir -p $PREFIX/include/nlohmann
-curl -L "https://github.com/nlohmann/json/releases/download/v3.11.2/json.hpp" -o $PREFIX/include/nlohmann/json.hpp
+mkdir -p $PREFIX/include/rapidjson
+curl -L "https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz" -o rapidjson.tar.gz
+tar xzf rapidjson.tar.gz --strip-components=2 -C $PREFIX/include/rapidjson rapidjson-1.1.0/include/rapidjson
+rm rapidjson.tar.gz
 
 # === autoconf based === 
 ../build/configure --prefix "$PREFIX" --enable-languages=c++ --disable-multilib --disable-bootstrap
