@@ -12,7 +12,7 @@ const body_parser = require('body-parser');
 const runtime = require('./runtime');
 
 const logger = Logger.create('index');
-const app = express(); // yolo
+const app = express(); // bump
 expressWs(app);
 
 (async () => {
