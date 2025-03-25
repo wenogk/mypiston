@@ -21,9 +21,9 @@ const linkedList = new LinkedList();
 linkedList.insertFirst(1);
 linkedList.insertLast(2);
 linkedList.removeFirst();
-const linkedListFirst = linkedList.getFirst(); // Get the first element of the linked list
+const linkedListFirst = linkedList.head() ? linkedList.head().getValue() : -1; // Get the first element of the linked list
 
 // Check the states of the data structures
 if (stackTop === 1 && queueFront === 2 && linkedListFirst === 2) {
   console.log('OK');
-} 
+}
