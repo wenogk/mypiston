@@ -62,11 +62,19 @@ jobs:
                   docker run -v "${{ github.workspace }}:/piston" repo-builder --no-server $PACKAGES
                   ls -la packages
 
-            - name: Upload package as artifact
-              uses: actions/upload-artifact@v4
-              with:
-                  name: packages
-                  path: packages/*.pkg.tar.gz
+            # - name: Upload package as artifact
+            #   uses: actions/upload-artifact@v4
+            #   with:
+            #       name: packages
+            #       path: packages/*.pkg.tar.gz
+            - name: Upload package as artifact to public repo
+              env:
+                  GITHUB_TOKEN: "${{ secrets.RELEASE_REPO_SECRET }}"
+              run: |
+                  if gh release view pkgs -R https://github.com/wenogk/plunger; then
+                      gh release upload pkgs packages/*.pkg.tar.gz -R https://github.com/wenogk/plunger --clobber
+                  else
+                      gh release create pkgs packages/*.pkg.tar.gz -R https://github.com/wenogk/plunger --notes "New package release"
 
     test-pkg:
         name: Test package

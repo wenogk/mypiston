@@ -51,11 +51,11 @@ jobs:
         needs: build-pkg
         steps:
             - name: 'Download all release assets'
-              run: curl -s https://api.github.com/repos/wenogk/mypiston/releases/latest | jq '.assets[].browser_download_url' -r | xargs -L 1 curl -sLO
+              run: curl -s https://api.github.com/repos/wenogk/plunger/releases/latest | jq '.assets[].browser_download_url' -r | xargs -L 1 curl -sLO
             - name: 'Generate index file'
               run: |
                   echo "" > index
-                  BASEURL=https://github.com/wenogk/mypiston/releases/download/pkgs/
+                  BASEURL=https://github.com/wenogk/plunger/releases/download/pkgs/
                   for pkg in *.pkg.tar.gz
                   do
                     PKGFILE=$(basename $pkg)
@@ -67,11 +67,19 @@ jobs:
                     echo "$PKGNAME,$PKGVERSION,$PKGCHECKSUM,$BASEURL$PKGFILE" >> index
                     echo "Adding package $PKGNAME-$PKGVERSION"
                   done
-            - name: Upload index
-              uses: svenstaro/upload-release-action@v2
-              with:
-                  repo_token: ${{ secrets.GITHUB_TOKEN }}
-                  file: index
-                  tag: pkgs
-                  overwrite: true
-                  file_glob: true
+            # - name: Upload index
+            #   uses: svenstaro/upload-release-action@v2
+            #   with:
+            #       repo_token: ${{ secrets.GITHUB_TOKEN }}
+            #       file: index
+            #       tag: pkgs
+            #       overwrite: true
+            #       file_glob: true
+            - name: Publish index to public repo
+              env:
+                  GITHUB_TOKEN: "${{ secrets.RELEASE_REPO_SECRET }}"
+              run: |
+                  if gh release view pkgs -R https://github.com/wenogk/plunger; then
+                      gh release upload pkgs index -R https://github.com/wenogk/plunger --clobber
+                  else
+                      gh release create pkgs index -R https://github.com/wenogk/plunger --notes "Updated index file"
